@@ -70,8 +70,9 @@ function visualFor(event) {
   const isField = /четырёхбор|шиповка|прыж|метани/i.test(event.title);
   const accent = isCross ? '#d18b3b' : isField ? '#4e9a78' : '#2f78b4';
   const kind = isCross ? 'КРОСС' : isField ? 'ПОЛЕ' : 'ДОРОЖКА';
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 360"><rect width="900" height="360" fill="#082f56"/><circle cx="740" cy="70" r="170" fill="${accent}" opacity=".22"/><path d="M0 290 C220 150 420 170 900 260 L900 360 L0 360Z" fill="${accent}" opacity=".9"/><path d="M0 315 C240 190 470 215 900 285" fill="none" stroke="#fff" stroke-width="8" opacity=".8"/><text x="46" y="86" fill="#fff" font-family="Arial,sans-serif" font-size="28" font-weight="700">${kind}</text><text x="46" y="130" fill="#fff" font-family="Arial,sans-serif" font-size="18">${event.title.slice(0, 42).replace(/&/g, '&amp;')}</text><text x="46" y="166" fill="#dcecf8" font-family="Arial,sans-serif" font-size="14">СТАРТ ЛНР · 2026</text></svg>`;
-  return { image: `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`, label: `Иллюстрация для события «${event.title}»` };
+  const number = String(event.row).padStart(3, '0');
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 360"><rect width="900" height="360" fill="#082f56"/><circle cx="740" cy="70" r="170" fill="${accent}" opacity=".22"/><path d="M0 290 C220 150 420 170 900 260 L900 360 L0 360Z" fill="${accent}" opacity=".9"/><path d="M0 315 C240 190 470 215 900 285" fill="none" stroke="#fff" stroke-width="8" opacity=".8"/><path d="M650 360 L740 205 L830 360" fill="none" stroke="#fff" stroke-width="4" opacity=".65"/><text x="46" y="74" fill="#fff" font-family="Arial,sans-serif" font-size="28" font-weight="700">${kind} · ЛНР</text><text x="46" y="121" fill="#fff" font-family="Arial,sans-serif" font-size="18">${event.title.slice(0, 45).replace(/&/g, '&amp;')}</text><text x="46" y="158" fill="#dcecf8" font-family="Arial,sans-serif" font-size="14">ЛУГАНСК · СТАРТ №${number}</text><text x="710" y="82" fill="#fff" font-family="Arial,sans-serif" font-size="36" font-weight="700">${event.date.slice(5).replace('-', '·')}</text></svg>`;
+  return { image: `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`, label: `Уникальная тематическая иллюстрация события «${event.title}»` };
 }
 const statusText = { planned: 'ПО ПЛАНУ', past: 'ДАТА ПРОШЛА' };
 const vflaCalendarUrl = 'https://rusathletics.info/meropriyatiya/calendar/';
@@ -94,11 +95,11 @@ const verifiedResults = {
   },
 };
 const athleteLeaders = [
-  ['Муравьёв Егор', '1 место', 'кросс 5 км · 16:03,2', 'ИП Ч кросс 16.04.2026.pdf'],
-  ['Котляр Анастасия', '2 место', 'кросс · 3:17,1', 'ИП П кросс 16.04.2026 (2).pdf'],
-  ['Уразгильдеева Эльмира', '3 место', 'кросс 1 км · 3:20,9', 'ИП П кросс 16.04.2026 (2).pdf'],
-  ['Короп Полина', '7 место', 'кросс 1 км · 3:31,2', 'ИП П кросс 16.04.2026 (2).pdf'],
-  ['Копач Богдан', '5 место', 'кросс 5 км · 20:04,0', 'ИП Ч кросс 16.04.2026.pdf'],
+  { name: 'Половова Аделина', wins: 9, podiums: 10, grade: 'заявлена: II; в строке кросса: I', sources: 'Шиповка с. 25; Первенство ЛНР (февраль) с. 17, 19; Первенство ЛНР (апрель) с. 13, 15; предновогодние с. 17, 19; первенство по кроссу с. 5; Чемпионат ЛНР с. 10, 11' },
+  { name: 'Троценко Михаил', wins: 9, podiums: 9, grade: 'заявлен: III; в таблицах: III, I и II юн.', sources: 'Первенство ЛНР (февраль) с. 34; Первенство ЛНР (апрель) с. 43, 50; предновогодние с. 10, 29; четырёхборье с. 34–37' },
+  { name: 'Колодин Никита', wins: 8, podiums: 8, grade: 'заявлен: КМС; в таблицах: КМС и I', sources: 'Шиповка с. 16, 34; Первенство ЛНР (апрель) с. 31, 33; предновогодние с. 11, 14; Чемпионат ЛНР с. 23, 24' },
+  { name: 'Шевченко Александра', wins: 7, podiums: 8, grade: 'заявлена: КМС; в таблицах: КМС, III и II', sources: 'Первенство ЛНР (февраль) с. 8, 27; Первенство ЛНР (апрель) с. 9, 53; предновогодние с. 9, 24; Чемпионат ЛНР с. 7, 8' },
+  { name: 'Шатов Максим', wins: 5, podiums: 8, grade: 'заявлен: III / II юн.; в таблицах: III и юн. разряды', sources: 'Шиповка с. 27; Первенство ЛНР (февраль) с. 29; Первенство ЛНР (апрель) с. 50; предновогодние с. 21; четырёхборье с. 28, 29, 31, 33' },
 ];
 let month = new Date(today.getFullYear(), today.getMonth(), 1);
 let currentFilter = 'all';
@@ -109,6 +110,12 @@ function elem(tag, cls, text) {
   if (cls) node.className = cls;
   if (text !== undefined) node.textContent = text;
   return node;
+}
+const requestStorageKey = 'startLnrAdminRequests';
+function saveAdminRequest(type, data) {
+  const requests = JSON.parse(localStorage.getItem(requestStorageKey) || '[]');
+  requests.unshift({ id: `req-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`, type, data, status: 'new', createdAt: new Date().toISOString() });
+  localStorage.setItem(requestStorageKey, JSON.stringify(requests));
 }
 function dateLabel(value) {
   return new Intl.DateTimeFormat('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' }).format(new Date(`${value}T12:00:00`));
@@ -160,7 +167,7 @@ function renderEvents() {
     const card = elem('article', `event-card ${event.type === 'trip' ? 'trip-card' : ''}`);
     const top = elem('div', 'event-top');
     top.append(elem('span', `tag tag-${event.status}`, `● ${statusText[event.status]}`), elem('span', 'event-index', event.type === 'trip' ? 'ВЫЕЗД · ПРЕДЛОЖЕНИЕ' : 'МЕСТНЫЙ'));
-    if (event.status === 'past' && event.type === 'local') {
+    if (event.type === 'local') {
       const visual = visualFor(event);
       const image = elem('img', 'event-photo', ''); image.src = visual.image; image.alt = `${visual.label}: ${event.title}`; image.loading = 'lazy';
       card.append(image, elem('span', 'photo-note', 'ТЕМАТИЧЕСКАЯ ИЛЛЮСТРАЦИЯ'));
@@ -184,6 +191,33 @@ function renderEvents() {
 }
 document.querySelector('#sliderPrev').addEventListener('click', () => document.querySelector('#eventGrid').scrollBy({ left: -document.querySelector('.event-card')?.getBoundingClientRect().width - 18 || -350, behavior: 'smooth' }));
 document.querySelector('#sliderNext').addEventListener('click', () => document.querySelector('#eventGrid').scrollBy({ left: (document.querySelector('.event-card')?.getBoundingClientRect().width || 330) + 18, behavior: 'smooth' }));
+function renderTrips() {
+  const slider = document.querySelector('#tripSlider');
+  if (!slider) return;
+  slider.replaceChildren();
+  trips.forEach(([row,date,end,title,place,ages]) => {
+    const card = elem('article', 'trip-board trip-slide');
+    const head = elem('div', 'trip-board-head');
+    head.append(elem('strong', '', title), elem('span', 'status-badge', 'ПРЕДЛОЖЕНИЕ'));
+    card.append(head, elem('p', 'trip-date', `${rangeLabel({ date, end })} · ${place}`), elem('small', '', `${ages} · строка ${row} в таблице предложений`));
+    const controls = elem('div', 'trip-slide-actions');
+    const check = elem('a', 'button button-outline', 'Проверить ВФЛА ↗'); check.href = vflaCalendarUrl; check.target = '_blank'; check.rel = 'noopener noreferrer';
+    const suggest = elem('button', 'button button-blue', 'Предложить кандидата'); suggest.type = 'button'; suggest.addEventListener('click', () => openCandidateForm({ title, date, end, place, ages, type: 'trip', row }));
+    controls.append(check, suggest); card.append(controls); slider.append(card);
+  });
+  document.querySelector('#tripSliderCount').textContent = `${trips.length} предложений`;
+}
+function openTripSuggestion() {
+  const content = elem('div'); content.append(elem('span', 'kicker', 'НОВОЕ ПРЕДЛОЖЕНИЕ'), elem('h2', '', 'Предложить выезд'), elem('p', 'muted', 'Демо: предложение останется только в этом браузере. Администратор другого устройства его не увидит.'));
+  const form = elem('form', 'demo-form');
+  form.append(field('Название соревнования', 'title', 'Например, межрегиональные соревнования'), field('Город и место', 'place', 'Город проведения'), field('Даты', 'dates', 'Например, 12–15 июня 2026'), field('Кто предлагает', 'author', 'ФИО или организация'), field('Комментарий', 'comment', 'Возраст, дисциплины, ссылка на положение', false));
+  const submit = elem('button', 'button button-blue', 'Подать предложение'); submit.type = 'submit'; form.append(submit);
+  form.addEventListener('submit', event => { event.preventDefault(); saveAdminRequest('trip', Object.fromEntries(new FormData(form).entries())); submit.disabled = true; form.append(elem('p', 'notice', 'Сохранено в демо-очередь этого браузера. Для отправки реальному администратору требуется подключить сервер.')); });
+  content.append(form); showModal(content);
+}
+document.querySelector('#tripPrev')?.addEventListener('click', () => document.querySelector('#tripSlider')?.scrollBy({ left: -360, behavior: 'smooth' }));
+document.querySelector('#tripNext')?.addEventListener('click', () => document.querySelector('#tripSlider')?.scrollBy({ left: 360, behavior: 'smooth' }));
+document.querySelector('#suggestTrip')?.addEventListener('click', openTripSuggestion);
 document.querySelectorAll('[data-filter]').forEach(button => button.addEventListener('click', () => {
   currentFilter = button.dataset.filter;
   document.querySelectorAll('[data-filter]').forEach(item => { item.classList.toggle('active', item === button); item.setAttribute('aria-pressed', String(item === button)); });
@@ -237,15 +271,15 @@ function openEvent(event) {
   const sections = [
     ['Регламент', 'Регламент', 'Отдельный утверждённый регламент не предоставлен. План не заменяет положение о соревновании.'],
     ['Расписание', 'Расписание', 'Почасовое расписание не предоставлено. Перед поездкой сверьте сроки с организатором.'],
-    ['Протоколы', 'Итоговые протоколы', result ? `Сверенный рабочий PDF: ${result.source}. Данные ниже ограничены строками из этого протокола.` : 'Публикации с файлами в MAX доступны в разделе «Итоговые протоколы», но содержание вложений пока не подтверждено.'],
+    ['Протоколы', 'Итоговые протоколы', result ? `Рабочий PDF: ${result.source}. Данные ниже ограничены строками из этого протокола.` : 'Для этого события отдельный итоговый протокол в предоставленных файлах не найден.'],
   ];
   if (event.type === 'trip' && event.status === 'past') sections.push(['Спортсмены', 'Наши спортсмены', 'Для этого выезда пока нет сверенного протокола ВФЛА с участниками из ЛНР. Не показываем неподтверждённые ФИО.']);
   if (event.type === 'trip' && event.status === 'planned') sections.splice(2, 1, ['ВФЛА', 'Проверить на ВФЛА', 'Соревнование находится в предложениях по выездам. Проверьте официальную карточку и условия участия на сайте ВФЛА перед подачей кандидата.']);
-  if (event.type === 'trip' && event.status === 'planned') sections.push(['Кандидат', 'Предложить спортсмена', 'Оставьте ФИО и виды. Заявка сохранится только в этом демонстрационном окне и получит статус для администратора.']);
+  if (event.type === 'trip' && event.status === 'planned') sections.push(['Кандидат', 'Предложить спортсмена', 'Оставьте демонстрационные данные. Заявка сохранится только в браузере и появится в локальной демо-очереди.']);
   function select(index) {
     [...tabs.children].forEach((button, i) => { button.classList.toggle('active', i === index); button.setAttribute('aria-pressed', String(i === index)); });
     panel.replaceChildren(elem('h3', '', sections[index][1]), elem('p', '', sections[index][2]));
-    if (index === 2 && !(event.type === 'trip' && event.status === 'planned')) { const link = elem('a', 'button button-blue', 'Перейти к публикациям MAX ↗'); link.href = '#protocols'; link.addEventListener('click', closeModal); panel.append(link); }
+    if (index === 2 && !(event.type === 'trip' && event.status === 'planned')) { const link = elem('a', 'button button-blue', 'Перейти к списку протоколов ↗'); link.href = '#protocols'; link.addEventListener('click', closeModal); panel.append(link); }
     if (event.type === 'trip' && event.status === 'planned' && index === 2) { const link = elem('a', 'button button-blue', 'Открыть карточку ВФЛА ↗'); link.href = vflaCalendarUrl; link.target = '_blank'; link.rel = 'noopener noreferrer'; panel.append(link); }
     if (result && index === 2) {
       const table = elem('div', 'result-list');
@@ -266,52 +300,56 @@ function field(label, name, placeholder, required = true) {
 }
 function openCoachForm() {
   const content = elem('div');
-  content.append(elem('span', 'kicker', 'ЗАЯВКА НА СОГЛАСОВАНИЕ'), elem('h2', '', 'Я новый тренер'), elem('p', 'muted', 'Заполните форму и сохраните черновик. Данные остаются на вашем устройстве; на сайт они не отправляются. Карточку сможет добавить только администратор после проверки.'));
+  content.append(elem('span', 'kicker', 'ЗАЯВКА НА СОГЛАСОВАНИЕ'), elem('h2', '', 'Я новый тренер'), elem('p', 'muted', 'Демо: заявку увидят только на этом устройстве. Для отправки реальному администратору требуется сервер; пока не вводите реальные персональные данные.'));
   const form = elem('form', 'demo-form');
   form.append(field('Фамилия, имя, отчество', 'name', 'Укажите полное имя'), field('Город', 'city', 'Например, Луганск'), field('Квалификация', 'category', 'Укажите категорию'), field('Судейская категория (если есть)', 'judge', 'Необязательно', false));
-  const submit = elem('button', 'button button-blue', 'Скачать черновик заявки'); submit.type = 'submit'; form.append(submit);
+  const submit = elem('button', 'button button-blue', 'Подать на добавление'); submit.type = 'submit'; form.append(submit);
   form.addEventListener('submit', action => {
     action.preventDefault();
     const data = new FormData(form);
-    const text = `Заявка на добавление карточки тренера\nФИО: ${data.get('name')}\nГород: ${data.get('city')}\nКвалификация: ${data.get('category')}\nСудейская категория: ${data.get('judge') || 'не указана'}\n\nСтатус: на проверке администратора.\n`;
-    const url = URL.createObjectURL(new Blob([text], { type: 'text/plain;charset=utf-8' }));
-    const link = elem('a'); link.href = url; link.download = 'zayavka-trener.txt'; document.body.append(link); link.click(); link.remove(); setTimeout(() => URL.revokeObjectURL(url), 60000);
-    const notice = elem('p', 'notice', 'Черновик скачан на ваше устройство. Отправьте его администратору по согласованному каналу. Форма не отправляет сведения автоматически и не создаёт публичную карточку.');
+    saveAdminRequest('coach', Object.fromEntries(data.entries()));
+    submit.disabled = true;
+    const notice = elem('p', 'notice', 'Заявка сохранена в локальной демо-очереди. Откройте страницу администратора в этом же браузере, чтобы проверить и утвердить карточку. На другие устройства данные не передаются.');
     form.append(notice);
   });
   content.append(form); showModal(content);
 }
 document.querySelector('#newCoach').addEventListener('click', openCoachForm);
 function openCandidateForm(event) {
-  const content = elem('div'); content.append(elem('span', 'kicker', 'КАНДИДАТ НА ВЫЕЗД'), elem('h2', '', event.title), elem('p', 'muted', 'Демонстрационная заявка. Она не отправляется организаторам автоматически.'));
+  const content = elem('div'); content.append(elem('span', 'kicker', 'КАНДИДАТ НА ВЫЕЗД'), elem('h2', '', event.title), elem('p', 'muted', 'Демо: кандидат сохранится только в этом браузере; на другое устройство заявка не отправится.'));
   const form = elem('form', 'demo-form');
   form.append(field('Фамилия, имя, отчество', 'name', 'ФИО спортсмена'), field('Виды', 'events', 'Например, 100 м, прыжок в длину'));
   const submit = elem('button', 'button button-blue', 'Сохранить на согласование'); submit.type = 'submit'; form.append(submit);
   form.addEventListener('submit', action => {
     action.preventDefault();
+    saveAdminRequest('candidate', { event: event.title, ...Object.fromEntries(new FormData(form).entries()) });
     submit.disabled = true;
-    const status = elem('p', 'notice', 'Статус: на проверке.'); form.append(status);
-    const controls = elem('div', 'request-controls');
-    [['Согласовать', 'Согласовано'], ['Отклонить', 'Отклонено'], ['На уточнение', 'Нужно уточнение']].forEach(([label, next]) => { const button = elem('button', 'button button-outline', label); button.type = 'button'; button.addEventListener('click', () => { status.textContent = `Статус: ${next}.`; controls.querySelectorAll('button').forEach(item => { item.disabled = true; }); }); controls.append(button); });
-    form.append(controls);
+    form.append(elem('p', 'notice', 'Сохранено в локальную демо-очередь. Решение можно отметить на странице администратора в этом же браузере.'));
   });
   content.append(form); showModal(content);
 }
 const coaches = [
-  ['АК', 'Анна К.', 'Беговые дисциплины', 'Демонстрационная карточка · сведения не подтверждены'],
-  ['МС', 'Михаил С.', 'Прыжки и многоборье', 'Демонстрационная карточка · сведения не подтверждены'],
-  ['ЕЛ', 'Елена Л.', 'Подготовка юных спортсменов', 'Демонстрационная карточка · сведения не подтверждены'],
+  ['АК', 'Анна К.', 'Беговые дисциплины', 'Демонстрационная иллюстрация · сведения не подтверждены', '#d9eef8', '#2378b8'],
+  ['МС', 'Михаил С.', 'Прыжки и многоборье', 'Демонстрационная иллюстрация · сведения не подтверждены', '#e9e2f7', '#7451a9'],
+  ['ЕЛ', 'Елена Л.', 'Подготовка юных спортсменов', 'Демонстрационная иллюстрация · сведения не подтверждены', '#f7e6d5', '#bc6b35'],
 ];
-coaches.forEach(([initials, name, direction, note]) => {
+function coachPortrait(initials, background, accent) {
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160"><rect width="160" height="160" rx="18" fill="${background}"/><circle cx="80" cy="64" r="30" fill="${accent}" opacity=".88"/><path d="M34 146c5-35 23-52 46-52s41 17 46 52" fill="${accent}" opacity=".88"/><path d="M55 59c4-20 15-30 28-30 16 0 25 11 27 30-13-8-39-8-55 0z" fill="#173d59"/><text x="80" y="145" text-anchor="middle" font-family="Arial,sans-serif" font-size="15" font-weight="700" fill="#fff">${initials}</text></svg>`;
+  return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
+}
+coaches.forEach(([initials, name, direction, note, background, accent]) => {
   const card = elem('article', 'coach-card');
-  const avatar = elem('div', 'coach-avatar', initials); avatar.setAttribute('aria-hidden', 'true');
+  const avatar = elem('img', 'coach-avatar', ''); avatar.src = coachPortrait(initials, background, accent); avatar.alt = `Сгенерированный портрет для демонстрационной карточки ${name}`;
   card.append(avatar, elem('span', 'coach-demo-label', 'ПРИМЕР ОФОРМЛЕНИЯ'), elem('h3', '', name), elem('p', '', direction), elem('small', '', note));
   document.querySelector('#coachGrid').append(card);
 });
-const protocolSources = [
-  ['MAX · публикация 1 ↗', 'https://max.ru/id9403006509_gos/AZxfyqD9YjM'],
-  ['MAX · публикация 2 ↗', 'https://max.ru/id9403006509_gos/AZ8TdUbrYdU'],
-];
+JSON.parse(localStorage.getItem(requestStorageKey) || '[]').filter(request => request.type === 'coach' && request.status === 'approved').forEach(request => {
+  const data = request.data; const initials = (data.name.match(/[А-ЯЁA-Z]/gi) || ['?']).slice(0, 2).join('').toUpperCase();
+  const card = elem('article', 'coach-card approved-coach');
+  const avatar = elem('img', 'coach-avatar', ''); avatar.src = coachPortrait(initials, '#e6f2e8', '#2d8d68'); avatar.alt = `Портрет карточки тренера ${data.name}`;
+  card.append(avatar, elem('span', 'coach-demo-label', 'ОДОБРЕНО В ДЕМО-ОЧЕРЕДИ'), elem('h3', '', data.name), elem('p', '', data.category), elem('small', '', `${data.city} · судейская категория: ${data.judge || 'не указана'}`));
+  document.querySelector('#coachGrid').append(card);
+});
 const protocols = [
   ['«Шиповка юных» · 28–29 января 2026', 'ИП 28-29.01.2026 Шиповка юных.pdf'],
   ['Первенство ЛНР · 4–5 февраля 2026', 'ИП П ЛНР 04-05.02.2026.pdf'],
@@ -327,20 +365,15 @@ protocols.forEach(([title, file]) => {
   const text = item.children[1];
   text.append(elem('strong', '', title), elem('small', '', `Рабочий файл: ${file}`));
   const actions = elem('div', 'protocol-actions');
-  protocolSources.forEach(([label, href]) => {
-    const link = elem('a', 'protocol-link', label);
-    link.href = href; link.target = '_blank'; link.rel = 'noopener noreferrer';
-    actions.append(link);
-  });
-  actions.append(elem('span', 'protocol-status', 'Нужна сверка'));
+  actions.append(elem('span', 'protocol-status', 'Рабочий PDF · нужна сверка'));
   item.append(actions);
   document.querySelector('#protocolList').append(item);
 });
 [
   ['Календарь стартов', '26 легкоатлетических соревнований перенесены из календарного плана ЛНР на 2026 год. Даты требуют подтверждения организатора перед поездкой.'],
   ['Выездные соревнования', 'Предложения по выездам внесены из таблицы на 2026 год. Проверьте место, дату и программу у организаторов.'],
-  ['Результаты стартов', 'Ссылки на сообщения MAX с файловыми вложениями размещены в разделе протоколов. Их содержимое сверяется с рабочими PDF перед публикацией.'],
+  ['Результаты стартов', 'Итоговые строки из рабочих PDF сверяются перед публикацией; неподтверждённые результаты не выдаются за официальные.'],
   ['Приём кандидатов', 'Для выездов можно предложить спортсмена и виды. В демо-заявке доступны статусы согласования администратора.'],
 ].forEach(([title, text], i) => { const article = elem('article', 'news-item'); article.append(elem('span', 'news-count', String(i + 1).padStart(2, '0')), elem('h3', '', title), elem('p', '', text), elem('small', '', 'ПРИМЕР ПУБЛИКАЦИИ')); document.querySelector('#newsList').append(article); });
-athleteLeaders.forEach(([name, place, result, source], i) => { const row = elem('article', 'ranking-row'); row.append(elem('span', 'ranking-number', String(i + 1).padStart(2, '0')), elem('strong', '', name), elem('span', '', `${place} · ${result}`), elem('small', '', `Источник: ${source}`)); document.querySelector('#rankingList')?.append(row); });
-renderCalendar(); renderEvents();
+athleteLeaders.forEach(({ name, wins, podiums, grade, sources }, i) => { const row = elem('article', 'ranking-row'); row.append(elem('span', 'ranking-number', String(i + 1).padStart(2, '0')), elem('strong', '', name), elem('span', '', `Победы: ${wins} · Призовые места: ${podiums} · ${grade}`), elem('small', '', `Рабочие PDF, страницы: ${sources}`)); document.querySelector('#rankingList')?.append(row); });
+renderCalendar(); renderEvents(); renderTrips();
