@@ -76,3 +76,14 @@ button:focus-visible,a:focus-visible{outline:3px solid #f7ba3b;outline-offset:4p
 @media(max-width:1100px){.header-nav{gap:7px}.header-nav a{font-size:10px}.header-inner{gap:9px}}
 @media(max-width:760px){.header-nav{display:none}.quick-nav{bottom:0;right:0;left:0;justify-content:space-around;border-radius:0;padding:6px}.quick-nav a{font-size:11px}.footer{padding-bottom:53px}.hero-bottom-inner span:last-child{display:inline}.hero-bottom-inner a{font-size:8px}.source-note{padding:18px}}
 @media print{.quick-nav,.protocol-section,#ranking{display:none!important}}
+/* Horizontal competition catalogue and document actions */
+.slider-controls{display:flex;justify-content:flex-end;align-items:center;gap:14px;margin:-64px 0 20px;color:var(--muted);font-size:12px}
+.slider-controls button{width:42px;height:42px;border:1px solid var(--line);background:#fff;color:var(--navy);border-radius:4px;font-size:20px}.slider-controls button:hover{background:#e5f2fb}
+.event-grid{display:flex;gap:18px;overflow-x:auto;scroll-snap-type:x mandatory;overscroll-behavior-inline:contain;scrollbar-width:thin;padding:4px 4px 24px}
+.event-card{flex:0 0 min(340px,calc(100% - 4px));scroll-snap-align:start;overflow-wrap:anywhere}
+.event-grid .empty{padding:30px 0}.document-links{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:22px}.document-links .button{max-width:100%;white-space:normal}
+.source-note button{margin-top:4px}.calendar-day.trip{background:#fff2e2;border-color:#f4d3a3;color:#a4540e}
+@media(max-width:760px){.slider-controls{margin:0 0 20px;justify-content:flex-start}.event-card{flex-basis:min(340px,calc(100% - 4px))}}
+.button-hero-outline{border:1px solid #afdaf3;color:#fff;background:#ffffff12}.button-hero-outline:hover{background:#ffffff28}
+.hero-bottom-jump{border:1px solid #85b2d4;padding:9px 12px;border-radius:4px;white-space:nowrap}.hero-bottom-jump:hover{background:#ffffff1c}
+.quick-nav a{border:1px solid #cfdfed;background:#f4f9fc}.quick-nav a:hover{background:#dceefa}
