@@ -66,3 +66,13 @@ button:focus-visible,a:focus-visible{outline:3px solid #f7ba3b;outline-offset:4p
 @media(max-width:760px){.admin-demo{align-items:flex-start;flex-direction:column}.modal-actions .text-button{margin-left:0;display:block}}
 .admin-note{color:#286ba3!important}.suggestion-item{padding:12px;border:1px solid var(--line);color:var(--muted);font-size:12px}#suggestions h3{font-size:16px;margin-top:26px}
 @media print{#workflow{display:none!important}#preview{padding:0!important}.hero,.calendar-section,.events-section,.directory-section,.news-section,#trips,.closing,.footer,.site-header{display:none!important}}
+/* Clear access to official documents and section navigation */
+.header-nav .nav-highlight{background:var(--navy);color:#fff;padding:12px;border-radius:3px}.header-nav .nav-highlight:hover{background:var(--blue);color:#fff}
+.header-inner{gap:15px}.header-nav{gap:12px}.header-nav a{font-size:11px}
+.hero-bottom a:hover{text-decoration:underline}.hero-bottom a{color:inherit}
+.tag-past{color:#7c8896}.source-note{border:1px solid var(--line);border-left:4px solid var(--blue);background:#f3f7fb;padding:25px 28px;color:var(--ink);font-size:14px;line-height:1.7;margin:0 0 24px}.source-note p{color:var(--muted);margin:8px 0 15px}.source-note a{color:var(--blue);font-weight:800;text-decoration:underline;text-underline-offset:3px}
+.protocol-section{background:#f3f7fb}.protocol-section .source-note{background:#fff}.day-event-link{display:block;width:100%;padding:14px;text-align:left;background:white;color:var(--navy);border:1px solid var(--line);font-weight:750;margin-bottom:7px}.day-event-link:hover{background:#ecf6fc}
+.quick-nav{position:fixed;z-index:5;bottom:18px;right:18px;display:flex;gap:5px;background:white;padding:7px;box-shadow:0 6px 30px #001f4550;border:1px solid var(--line);border-radius:5px}.quick-nav a{font-size:11px;font-weight:800;color:var(--navy);padding:9px 10px;border-radius:3px}.quick-nav a:hover{background:#eaf5fc}
+@media(max-width:1100px){.header-nav{gap:7px}.header-nav a{font-size:10px}.header-inner{gap:9px}}
+@media(max-width:760px){.header-nav{display:none}.quick-nav{bottom:0;right:0;left:0;justify-content:space-around;border-radius:0;padding:6px}.quick-nav a{font-size:11px}.footer{padding-bottom:53px}.hero-bottom-inner span:last-child{display:inline}.hero-bottom-inner a{font-size:8px}.source-note{padding:18px}}
+@media print{.quick-nav,.protocol-section,#ranking{display:none!important}}
