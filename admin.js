@@ -1,6 +1,6 @@
 'use strict';
 const key = 'startLnrAdminRequests';
-const labels = { coach: 'Новый тренер', trip: 'Предложение по выезду', candidate: 'Кандидат на выезд' };
+const labels = { coach: 'Новый тренер', trip: 'Предложение по выезду', candidate: 'Кандидат на выезд', representative: 'Представитель · местный старт' };
 const statuses = { new: 'Новая', approved: 'Утверждено', declined: 'Отклонено', clarification: 'Нужно уточнение' };
 const read = () => JSON.parse(localStorage.getItem(key) || '[]');
 const write = items => localStorage.setItem(key, JSON.stringify(items));

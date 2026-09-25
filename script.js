@@ -290,6 +290,11 @@ function openEvent(event) {
   }
   sections.forEach(([label], index) => { const button = elem('button', '', label); button.type = 'button'; button.addEventListener('click', () => select(index)); tabs.append(button); });
   content.append(tabs, panel); select(0);
+  if (event.type === 'local' && event.status === 'planned') {
+    const apply = elem('button', 'button button-blue', 'Подать заявку для представителей →');
+    apply.type = 'button'; apply.addEventListener('click', () => openRepresentativeForm(event));
+    content.append(apply);
+  }
   content.append(elem('p', 'notice', 'Изменение сведений и публикация документов доступны только владельцу сайта через исходные файлы проекта.')); showModal(content);
 }
 
@@ -315,6 +320,20 @@ function openCoachForm() {
   content.append(form); showModal(content);
 }
 document.querySelector('#newCoach').addEventListener('click', openCoachForm);
+function openRepresentativeForm(event) {
+  const content = elem('div');
+  content.append(elem('span', 'kicker', 'ЗАЯВКА НА МЕСТНЫЙ СТАРТ'), elem('h2', '', event.title), elem('p', 'muted', 'Демо: заявка останется только в этом браузере и не попадёт организатору. Не вводите реальные персональные данные. Сроки подачи и условия участия уточняйте у организатора.'));
+  const form = elem('form', 'demo-form');
+  form.append(field('Представитель', 'name', 'Имя представителя'), field('Организация или команда', 'team', 'Название команды'), field('Количество участников', 'participants', 'Например, 5'), field('Виды программы', 'events', 'Например, бег 100 м'));
+  const submit = elem('button', 'button button-blue', 'Сохранить заявку'); submit.type = 'submit'; form.append(submit);
+  form.addEventListener('submit', action => {
+    action.preventDefault();
+    saveAdminRequest('representative', { event: event.title, date: rangeLabel(event), ...Object.fromEntries(new FormData(form).entries()) });
+    submit.disabled = true;
+    form.append(elem('p', 'notice', 'Заявка сохранена в локальной демо-очереди. Посмотреть её можно на странице администратора в этом же браузере. Организатор заявку не получил.'));
+  });
+  content.append(form); showModal(content);
+}
 function openCandidateForm(event) {
   const content = elem('div'); content.append(elem('span', 'kicker', 'КАНДИДАТ НА ВЫЕЗД'), elem('h2', '', event.title), elem('p', 'muted', 'Демо: кандидат сохранится только в этом браузере; на другое устройство заявка не отправится.'));
   const form = elem('form', 'demo-form');
