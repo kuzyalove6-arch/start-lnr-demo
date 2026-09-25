@@ -142,7 +142,8 @@ function renderCalendar() {
   for (let i = 1; i <= days; i++) {
     const iso = `${month.getFullYear()}-${String(month.getMonth() + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
     const matches = events.filter(event => event.date <= iso && event.end >= iso);
-    const day = elem(matches.length ? 'button' : 'span', `calendar-day ${matches.length ? `has-event ${matches[0].type}` : ''}`);
+    const day = elem(matches.length ? 'button' : 'span', `calendar-day ${matches.length ? `has-event ${matches[0].type}` : ''} ${iso === todayISO ? 'is-today' : ''}`);
+    if (iso === todayISO) day.setAttribute('aria-current', 'date');
     if (matches.length) {
       day.type = 'button';
       day.title = matches.map(event => event.title).join(', ');

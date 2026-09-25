@@ -88,6 +88,7 @@ button:focus-visible,a:focus-visible{outline:3px solid #f7ba3b;outline-offset:4p
 .event-card{flex:0 0 min(340px,calc(100% - 4px));scroll-snap-align:start;overflow-wrap:anywhere}
 .event-grid .empty{padding:30px 0}.document-links{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:22px}.document-links .button{max-width:100%;white-space:normal}
 .source-note button{margin-top:4px}.calendar-day.trip{background:#fff2e2;border-color:#f4d3a3;color:#a4540e}
+.calendar-day.is-today{border:2px solid var(--blue);box-shadow:inset 0 0 0 1px #fff;background:#dceefa;color:var(--navy)}.calendar-day.is-today strong{display:grid;place-items:center;min-width:25px;height:25px;padding:0 4px;border-radius:50%;background:var(--blue);color:#fff}.calendar-day.is-today.trip{background:#fff2e2}.calendar-day.is-today.has-event:hover{box-shadow:inset 0 0 0 2px var(--blue)}
 @media(max-width:760px){.slider-controls{margin:0 0 20px;justify-content:flex-start}.event-card{flex-basis:min(340px,calc(100% - 4px))}}
 .button-hero-outline{border:1px solid #afdaf3;color:#fff;background:#ffffff12}.button-hero-outline:hover{background:#ffffff28}
 .quick-nav a{border:1px solid #cfdfed;background:#f4f9fc}.quick-nav a:hover{background:#dceefa}
