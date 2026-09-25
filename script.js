@@ -117,6 +117,25 @@ function saveAdminRequest(type, data) {
   requests.unshift({ id: `req-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`, type, data, status: 'new', createdAt: new Date().toISOString() });
   localStorage.setItem(requestStorageKey, JSON.stringify(requests));
 }
+const telegramEndpoint = document.querySelector('meta[name="telegram-endpoint"]')?.content.trim();
+async function submitDemoRequest(type, data, submit, form) {
+  submit.disabled = true;
+  let saved = false;
+  try { saveAdminRequest(type, data); saved = true; } catch (_) { /* Storage may be disabled. */ }
+  const notice = elem('p', 'notice', 'Отправляем демо-заявку…');
+  notice.setAttribute('role', 'status'); form.append(notice);
+  if (!telegramEndpoint) {
+    notice.textContent = saved ? 'Сохранено только в этом браузере. Отправка в Telegram ещё не настроена.' : 'Не удалось сохранить заявку. Отправка в Telegram ещё не настроена.';
+    return;
+  }
+  try {
+    const response = await fetch(telegramEndpoint, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ type, data }) });
+    if (!response.ok) throw new Error('Telegram delivery failed');
+    notice.textContent = `Демо-заявка отправлена в Telegram-чат.${saved ? ' Копия сохранена в этом браузере.' : ''} Это не официальная заявка организатору.`;
+  } catch (_) {
+    notice.textContent = saved ? 'Не удалось подтвердить доставку в Telegram. Копия сохранена только в этом браузере; перед повторной отправкой проверьте чат.' : 'Не удалось подтвердить доставку в Telegram. Перед повторной отправкой проверьте чат.';
+  }
+}
 function dateLabel(value) {
   return new Intl.DateTimeFormat('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' }).format(new Date(`${value}T12:00:00`));
 }
@@ -213,7 +232,7 @@ function openTripSuggestion() {
   const form = elem('form', 'demo-form');
   form.append(field('Название соревнования', 'title', 'Например, межрегиональные соревнования'), field('Город и место', 'place', 'Город проведения'), field('Даты', 'dates', 'Например, 12–15 июня 2026'), field('Кто предлагает', 'author', 'ФИО или организация'), field('Комментарий', 'comment', 'Возраст, дисциплины, ссылка на положение', false));
   const submit = elem('button', 'button button-blue', 'Подать предложение'); submit.type = 'submit'; form.append(submit);
-  form.addEventListener('submit', event => { event.preventDefault(); saveAdminRequest('trip', Object.fromEntries(new FormData(form).entries())); submit.disabled = true; form.append(elem('p', 'notice', 'Сохранено в демо-очередь этого браузера. Для отправки реальному администратору требуется подключить сервер.')); });
+  form.addEventListener('submit', event => { event.preventDefault(); submitDemoRequest('trip', Object.fromEntries(new FormData(form).entries()), submit, form); });
   content.append(form); showModal(content);
 }
 document.querySelector('#tripPrev')?.addEventListener('click', () => document.querySelector('#tripSlider')?.scrollBy({ left: -360, behavior: 'smooth' }));
@@ -306,24 +325,20 @@ function field(label, name, placeholder, required = true) {
 }
 function openCoachForm() {
   const content = elem('div');
-  content.append(elem('span', 'kicker', 'ЗАЯВКА НА СОГЛАСОВАНИЕ'), elem('h2', '', 'Я новый тренер'), elem('p', 'muted', 'Демо: заявку увидят только на этом устройстве. Для отправки реальному администратору требуется сервер; пока не вводите реальные персональные данные.'));
+  content.append(elem('span', 'kicker', 'ЗАЯВКА НА СОГЛАСОВАНИЕ'), elem('h2', '', 'Я новый тренер'), elem('p', 'muted', 'Демо: используйте только вымышленные данные. После настройки подключения сообщение уйдёт в Telegram-чат; копия останется в этом браузере.'));
   const form = elem('form', 'demo-form');
   form.append(field('Фамилия, имя, отчество', 'name', 'Укажите полное имя'), field('Город', 'city', 'Например, Луганск'), field('Квалификация', 'category', 'Укажите категорию'), field('Судейская категория (если есть)', 'judge', 'Необязательно', false));
   const submit = elem('button', 'button button-blue', 'Подать на добавление'); submit.type = 'submit'; form.append(submit);
   form.addEventListener('submit', action => {
     action.preventDefault();
-    const data = new FormData(form);
-    saveAdminRequest('coach', Object.fromEntries(data.entries()));
-    submit.disabled = true;
-    const notice = elem('p', 'notice', 'Заявка сохранена в локальной демо-очереди. Откройте страницу администратора в этом же браузере, чтобы проверить и утвердить карточку. На другие устройства данные не передаются.');
-    form.append(notice);
+    submitDemoRequest('coach', Object.fromEntries(new FormData(form).entries()), submit, form);
   });
   content.append(form); showModal(content);
 }
 document.querySelector('#newCoach').addEventListener('click', openCoachForm);
 function openRepresentativeForm(event) {
   const content = elem('div');
-  content.append(elem('span', 'kicker', 'ЗАЯВКА НА МЕСТНЫЙ СТАРТ'), elem('h2', '', event.title), elem('p', 'muted', 'Демо: заявка останется только в этом браузере и не попадёт организатору. Не вводите реальные персональные данные. Сроки подачи и условия участия уточняйте у организатора.'));
+  content.append(elem('span', 'kicker', 'ЗАЯВКА НА МЕСТНЫЙ СТАРТ'), elem('h2', '', event.title), elem('p', 'muted', 'Демо: используйте только вымышленные данные. После настройки подключения сообщение уйдёт в Telegram-чат; это не заявка организатору. Сроки участия уточняйте у организатора.'));
   const form = elem('form', 'demo-form');
   form.append(field('Команда (организация)', 'team', 'Название команды'), field('ФИО представителя', 'name', 'Фамилия, имя, отчество'));
   const athletes = elem('div', 'athlete-fields');
@@ -357,22 +372,18 @@ function openRepresentativeForm(event) {
       grade: athlete.querySelector('[name="grade"]').value.trim(),
       events: [...athlete.querySelectorAll('[name="discipline"]')].map(input => input.value.trim()),
     }));
-    saveAdminRequest('representative', { event: event.title, date: rangeLabel(event), team: form.querySelector('[name="team"]').value.trim(), name: form.querySelector('[name="name"]').value.trim(), athletes: athletesData });
-    submit.disabled = true;
-    form.append(elem('p', 'notice', 'Заявка сохранена в локальной демо-очереди. Посмотреть её можно на странице администратора в этом же браузере. Организатор заявку не получил.'));
+    submitDemoRequest('representative', { event: event.title, date: rangeLabel(event), team: form.querySelector('[name="team"]').value.trim(), name: form.querySelector('[name="name"]').value.trim(), athletes: athletesData }, submit, form);
   });
   content.append(form); showModal(content);
 }
 function openCandidateForm(event) {
-  const content = elem('div'); content.append(elem('span', 'kicker', 'КАНДИДАТ НА ВЫЕЗД'), elem('h2', '', event.title), elem('p', 'muted', 'Демо: кандидат сохранится только в этом браузере; на другое устройство заявка не отправится.'));
+  const content = elem('div'); content.append(elem('span', 'kicker', 'КАНДИДАТ НА ВЫЕЗД'), elem('h2', '', event.title), elem('p', 'muted', 'Демо: используйте только вымышленные данные. После настройки подключения сообщение уйдёт в Telegram-чат; копия останется в этом браузере.'));
   const form = elem('form', 'demo-form');
   form.append(field('Фамилия, имя, отчество', 'name', 'ФИО спортсмена'), field('Виды', 'events', 'Например, 100 м, прыжок в длину'));
   const submit = elem('button', 'button button-blue', 'Сохранить на согласование'); submit.type = 'submit'; form.append(submit);
   form.addEventListener('submit', action => {
     action.preventDefault();
-    saveAdminRequest('candidate', { event: event.title, ...Object.fromEntries(new FormData(form).entries()) });
-    submit.disabled = true;
-    form.append(elem('p', 'notice', 'Сохранено в локальную демо-очередь. Решение можно отметить на странице администратора в этом же браузере.'));
+    submitDemoRequest('candidate', { event: event.title, ...Object.fromEntries(new FormData(form).entries()) }, submit, form);
   });
   content.append(form); showModal(content);
 }
