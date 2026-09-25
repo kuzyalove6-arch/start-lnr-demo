@@ -416,11 +416,16 @@ protocols.forEach(([title, file]) => {
   item.append(actions);
   document.querySelector('#protocolList').append(item);
 });
-[
-  ['Календарь стартов', '26 легкоатлетических соревнований перенесены из календарного плана ЛНР на 2026 год. Даты требуют подтверждения организатора перед поездкой.'],
-  ['Выездные соревнования', 'Предложения по выездам внесены из таблицы на 2026 год. Проверьте место, дату и программу у организаторов.'],
-  ['Результаты стартов', 'Итоговые строки из рабочих PDF сверяются перед публикацией; неподтверждённые результаты не выдаются за официальные.'],
-  ['Приём кандидатов', 'Для выездов можно предложить спортсмена и виды. В демо-заявке доступны статусы согласования администратора.'],
-].forEach(([title, text], i) => { const article = elem('article', 'news-item'); article.append(elem('span', 'news-count', String(i + 1).padStart(2, '0')), elem('h3', '', title), elem('p', '', text), elem('small', '', 'ПРИМЕР ПУБЛИКАЦИИ')); document.querySelector('#newsList').append(article); });
+const publicNews = [
+  ['23 сентября 2026', 'Новые дисциплины лёгкой атлетики включены в реестр', 'ВФЛА сообщает о включении в реестр шоссейного бега на 1 милю, 5 и 10 км, дисциплин в помещении, легкоатлетического двоеборья и других видов.', 'https://rusathletics.info/news/20544-novyie-discziplinyi-lyogkoj-atletiki-vklyuchenyi-vo-vserossijskij-reestr-vidov-sporta/'],
+  ['22 сентября 2026', 'В Москве анонсирован «Розовый забег»', 'По сообщению ВФЛА, 3 октября на Университетской площади Москвы запланирован забег на 3 км в поддержку женского здоровья.', 'https://rusathletics.info/news/20543-v-moskve-projdet-rozovyij-zabeg-v-podderzhku-zhenskogo-zdorovya/'],
+  ['18 сентября 2026', 'Конкурс организаторов чемпионатов России — 2027', 'ВФЛА объявила конкурс на проведение чемпионатов России по ряду внестадионных дисциплин, включая шоссейный бег и кросс.', 'https://rusathletics.info/news/20540-vfla-obyavlyaet-konkurs-na-provedenie-chempionatov-rossii-2027-po-vnestadionnyim-discziplinam/'],
+];
+publicNews.forEach(([date, title, text, url], i) => {
+  const article = elem('article', 'news-item');
+  const source = elem('a', 'news-source', 'Читать на сайте ВФЛА ↗'); source.href = url; source.target = '_blank'; source.rel = 'noopener noreferrer';
+  article.append(elem('span', 'news-count', String(i + 1).padStart(2, '0')), elem('h3', '', title), elem('p', '', text), elem('small', '', `ВФЛА · ${date}`), source);
+  document.querySelector('#newsList').append(article);
+});
 athleteLeaders.forEach(({ name, wins, podiums, grade, sources }, i) => { const row = elem('article', 'ranking-row'); row.append(elem('span', 'ranking-number', String(i + 1).padStart(2, '0')), elem('strong', '', name), elem('span', '', `Победы: ${wins} · Призовые места: ${podiums} · ${grade}`), elem('small', '', `Рабочие PDF, страницы: ${sources}`)); document.querySelector('#rankingList')?.append(row); });
 renderCalendar(); renderEvents(); renderTrips();
