@@ -324,11 +324,39 @@ function openRepresentativeForm(event) {
   const content = elem('div');
   content.append(elem('span', 'kicker', 'ЗАЯВКА НА МЕСТНЫЙ СТАРТ'), elem('h2', '', event.title), elem('p', 'muted', 'Демо: заявка останется только в этом браузере и не попадёт организатору. Не вводите реальные персональные данные. Сроки подачи и условия участия уточняйте у организатора.'));
   const form = elem('form', 'demo-form');
-  form.append(field('Представитель', 'name', 'Имя представителя'), field('Организация или команда', 'team', 'Название команды'), field('Количество участников', 'participants', 'Например, 5'), field('Виды программы', 'events', 'Например, бег 100 м'));
+  form.append(field('Команда (организация)', 'team', 'Название команды'), field('ФИО представителя', 'name', 'Фамилия, имя, отчество'));
+  const athletes = elem('div', 'athlete-fields');
+  function addAthlete() {
+    const athlete = elem('fieldset', 'athlete-entry');
+    athlete.append(elem('legend', '', `Спортсмен ${athletes.children.length + 1}`), field('ФИО спортсмена', 'athleteName', 'Фамилия, имя, отчество'));
+    const birth = field('Дата рождения', 'birthDate', ''); birth.querySelector('input').type = 'date'; birth.querySelector('input').max = todayISO; athlete.append(birth);
+    athlete.append(field('Разряд', 'grade', 'Например, I юн.'));
+    const events = elem('div', 'athlete-events');
+    function addEvent() {
+      const row = elem('div', 'athlete-event-row');
+      row.append(field('Вид программы', 'discipline', 'Например, бег 100 м'));
+      const remove = elem('button', 'text-button', 'Удалить вид'); remove.type = 'button';
+      remove.addEventListener('click', () => { if (events.children.length > 1) row.remove(); });
+      row.append(remove); events.append(row);
+    }
+    addEvent(); athlete.append(events);
+    const moreEvents = elem('button', 'button button-outline', '+ Добавить вид'); moreEvents.type = 'button'; moreEvents.addEventListener('click', addEvent); athlete.append(moreEvents);
+    const removeAthlete = elem('button', 'text-button', 'Удалить спортсмена'); removeAthlete.type = 'button';
+    removeAthlete.addEventListener('click', () => { if (athletes.children.length > 1) { athlete.remove(); [...athletes.children].forEach((item, index) => { item.querySelector('legend').textContent = `Спортсмен ${index + 1}`; }); } });
+    athlete.append(removeAthlete); athletes.append(athlete);
+  }
+  addAthlete(); form.append(athletes);
+  const moreAthletes = elem('button', 'button button-outline', '+ Добавить спортсмена'); moreAthletes.type = 'button'; moreAthletes.addEventListener('click', addAthlete); form.append(moreAthletes);
   const submit = elem('button', 'button button-blue', 'Сохранить заявку'); submit.type = 'submit'; form.append(submit);
   form.addEventListener('submit', action => {
     action.preventDefault();
-    saveAdminRequest('representative', { event: event.title, date: rangeLabel(event), ...Object.fromEntries(new FormData(form).entries()) });
+    const athletesData = [...athletes.children].map(athlete => ({
+      name: athlete.querySelector('[name="athleteName"]').value.trim(),
+      birthDate: athlete.querySelector('[name="birthDate"]').value,
+      grade: athlete.querySelector('[name="grade"]').value.trim(),
+      events: [...athlete.querySelectorAll('[name="discipline"]')].map(input => input.value.trim()),
+    }));
+    saveAdminRequest('representative', { event: event.title, date: rangeLabel(event), team: form.querySelector('[name="team"]').value.trim(), name: form.querySelector('[name="name"]').value.trim(), athletes: athletesData });
     submit.disabled = true;
     form.append(elem('p', 'notice', 'Заявка сохранена в локальной демо-очереди. Посмотреть её можно на странице администратора в этом же браузере. Организатор заявку не получил.'));
   });
